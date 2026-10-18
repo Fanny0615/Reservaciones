@@ -72,4 +72,60 @@ con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistema_hotel", "
             JOptionPane.showMessageDialog(null, "Error de Integridad Referencial o BD: " + sqle.getMessage());
         }
     }
+
+    public void altaHabitacion(Habitaciones obj) {
+        if (con == null) { JOptionPane.showMessageDialog(null, "Error: No hay conexión activa."); return; }
+        String sql = "INSERT INTO Habitaciones (idHotel, idEstadosHabitaciones, Nombre, Capacidad, NumeroHuespedes, PrecioNoche) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, obj.getIdHotel());
+            ps.setInt(2, obj.getIdEstadosHabitaciones());
+            ps.setString(3, obj.getNombre());
+            ps.setInt(4, obj.getCapacidad());
+            ps.setInt(5, obj.getNumeroHuespedes());
+            ps.setDouble(6, obj.getPrecioNoche());
+            int filasAfectadas = ps.executeUpdate();
+            System.out.println("Registros insertados: " + filasAfectadas);
+            JOptionPane.showMessageDialog(null, "Habitación guardada correctamente.");
+        } catch (SQLException sqle) {
+            System.out.println("Error al insertar habitación: " + sqle.getMessage());
+            JOptionPane.showMessageDialog(null, "Error de Integridad Referencial o BD: " + sqle.getMessage());
+        }
+    }
+     public void altaContactoHuesped(ContactosHuesped obj) {
+        if (con == null) { JOptionPane.showMessageDialog(null, "Error: No hay conexión activa."); return; }
+        String sql = "INSERT INTO ContactosHuesped (idHuesped, idTipoContacto, Valor) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, obj.getIdHuesped());
+            ps.setInt(2, obj.getIdTipoContacto());
+            ps.setString(3, obj.getValor());
+            int filasAfectadas = ps.executeUpdate();
+            System.out.println("Registros insertados: " + filasAfectadas);
+            JOptionPane.showMessageDialog(null, "Contacto de huésped guardado correctamente.");
+        } catch (SQLException sqle) {
+            System.out.println("Error al insertar contacto de huésped: " + sqle.getMessage());
+            JOptionPane.showMessageDialog(null, "Error de Integridad Referencial o BD: " + sqle.getMessage());
+        }
+    }
+     public void altaDomicilioHuesped(DomiciliosHuesped obj) {
+        if (con == null) { JOptionPane.showMessageDialog(null, "Error: No hay conexión activa."); return; }
+        String sql = "INSERT INTO DomiciliosHuesped (idHuesped, Calle, NumInt, NumExt, Colonia, CodigoPostal) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, obj.getIdHuesped());
+            ps.setString(2, obj.getCalle());
+            ps.setString(3, obj.getNumInt());
+            ps.setString(4, obj.getNumExt());
+            ps.setString(5, obj.getColonia());
+            ps.setString(6, obj.getCodigoPostal());
+            int filasAfectadas = ps.executeUpdate();
+            System.out.println("Registros insertados: " + filasAfectadas);
+            JOptionPane.showMessageDialog(null, "Domicilio guardado correctamente.");
+        } catch (SQLException sqle) {
+            System.out.println("Error al insertar domicilio: " + sqle.getMessage());
+            JOptionPane.showMessageDialog(null, "Error de Integridad Referencial o BD: " + sqle.getMessage());
+        }
+    }
+
 }
