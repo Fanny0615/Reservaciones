@@ -22,7 +22,6 @@ public class Conecta {
     public void conectar() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            // Cambien 'root' y '134340' por su usuario y contraseña de MySQL
 con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistema_hotel", "root", "");        } catch (ClassNotFoundException cnfe) {
             System.out.println("Error al cargar el driver: " + cnfe.getMessage());
         } catch (SQLException sqle) {
@@ -126,6 +125,81 @@ con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistema_hotel", "
             System.out.println("Error al insertar domicilio: " + sqle.getMessage());
             JOptionPane.showMessageDialog(null, "Error de Integridad Referencial o BD: " + sqle.getMessage());
         }
+         //INSERCIÓN EN TABLA HOTELES
+    public void altaHotel(Hotel obj) {
+        if (con == null) {
+            JOptionPane.showMessageDialog(null, "Error: No hay conexión activa.");
+            return;
+        }
+
+        String sql = "INSERT INTO Hoteles (Nombre) VALUES (?)";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, obj.getNombre());
+
+            int filas = ps.executeUpdate();
+            System.out.println("Registros insertados en Hoteles: " + filas);
+            JOptionPane.showMessageDialog(null, "Hotel guardado correctamente.");
+
+        } catch (SQLException sqle) {
+            System.out.println("Error al insertar hotel: " + sqle.getMessage());
+            JOptionPane.showMessageDialog(null, "Error de BD al guardar hotel: " + sqle.getMessage());
+        }
+    }
+
+    //INSERCIÓN EN TABLA DIRECCIONESHOTEL
+    public void altaDireccionHotel(DireccionHotel obj) {
+        if (con == null) {
+            JOptionPane.showMessageDialog(null, "Error: No hay conexión activa.");
+            return;
+        }
+
+        String sql = "INSERT INTO DireccionesHotel (idHotel, Calle, NumExt, Colonia, Municipio, Estado, CodigoPostal) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, obj.getIdHotel());
+            ps.setString(2, obj.getCalle());
+            ps.setString(3, obj.getNumExt());
+            ps.setString(4, obj.getColonia());
+            ps.setString(5, obj.getMunicipio());
+            ps.setString(6, obj.getEstado());
+            ps.setString(7, obj.getCodigoPostal());
+
+            int filas = ps.executeUpdate();
+            System.out.println("Registros insertados en DireccionesHotel: " + filas);
+            JOptionPane.showMessageDialog(null, "Dirección del hotel guardada correctamente.");
+
+        } catch (SQLException sqle) {
+            System.out.println("Error al insertar dirección de hotel: " + sqle.getMessage());
+            JOptionPane.showMessageDialog(null, "Error de Integridad Referencial: El idHotel no existe.\n" + sqle.getMessage());
+        }
+    }
+    
+    //INSERCION EN TABLA CONTACTO HOTEL
+    public void altaContactoHotel(ContactoHotel obj) {
+    if (con == null) {
+        JOptionPane.showMessageDialog(null, "Error: No hay conexión activa.");
+        return;
+    }
+
+    String sql = "INSERT INTO ContactosHotel (idHotel, idTipoContacto, Valor) VALUES (?, ?, ?)";
+
+    try {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, obj.getIdHotel());
+        ps.setInt(2, obj.getIdTipoContacto());
+        ps.setString(3, obj.getValor());
+
+        int filas = ps.executeUpdate();
+        System.out.println("Registros insertados en ContactosHotel: " + filas);
+        JOptionPane.showMessageDialog(null, "Contacto del hotel guardado correctamente.");
+
+    } catch (SQLException sqle) {
+        System.out.println("Error al insertar contacto de hotel: " + sqle.getMessage());
+        JOptionPane.showMessageDialog(null, "Error de Integridad Referencial: El idHotel o idTipoContacto no existen.\n" + sqle.getMessage());
+    }
     }
 
 }
